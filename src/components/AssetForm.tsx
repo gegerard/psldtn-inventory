@@ -30,6 +30,8 @@ const AssetForm = ({ isOpen, onClose, onSave, asset }: AssetFormProps) => {
       cpu: asset?.specifications.cpu || "",
       ram: asset?.specifications.ram || "",
       storage: asset?.specifications.storage || "",
+      storage2: asset?.specifications.storage2 || "",
+      storage3: asset?.specifications.storage3 || "",
       graphics: asset?.specifications.graphics || "",
       operatingSystem: asset?.specifications.operatingSystem || "",
       network: asset?.specifications.network || "",
@@ -197,12 +199,32 @@ const AssetForm = ({ isOpen, onClose, onSave, asset }: AssetFormProps) => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="storage">Storage</Label>
+                <Label htmlFor="storage">Primary Storage</Label>
                 <Input
                   id="storage"
                   value={formData.specifications.storage}
                   onChange={(e) => handleSpecChange('storage', e.target.value)}
                   placeholder="e.g., 512GB NVMe SSD"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="storage2">Secondary Storage</Label>
+                <Input
+                  id="storage2"
+                  value={formData.specifications.storage2}
+                  onChange={(e) => handleSpecChange('storage2', e.target.value)}
+                  placeholder="e.g., 1TB HDD"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="storage3">Additional Storage</Label>
+                <Input
+                  id="storage3"
+                  value={formData.specifications.storage3}
+                  onChange={(e) => handleSpecChange('storage3', e.target.value)}
+                  placeholder="e.g., 2TB External Drive"
                 />
               </div>
 

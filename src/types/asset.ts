@@ -14,6 +14,8 @@ export interface Asset {
     cpu?: string;
     ram?: string;
     storage?: string;
+    storage2?: string;
+    storage3?: string;
     graphics?: string;
     operatingSystem?: string;
     network?: string;

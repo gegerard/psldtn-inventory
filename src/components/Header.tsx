@@ -1,14 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Download, FileSpreadsheet } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface HeaderProps {
   onAddAsset: () => void;
   searchTerm: string;
   onSearchChange: (value: string) => void;
+  onExportExcel: () => void;
+  onExportGoogleSheets: () => void;
 }
 
-const Header = ({ onAddAsset, searchTerm, onSearchChange }: HeaderProps) => {
+const Header = ({ onAddAsset, searchTerm, onSearchChange, onExportExcel, onExportGoogleSheets }: HeaderProps) => {
   return (
     <header className="border-b bg-card shadow-[var(--shadow-soft)] sticky top-0 z-50">
       <div className="container mx-auto px-6 py-4">
@@ -28,6 +31,25 @@ const Header = ({ onAddAsset, searchTerm, onSearchChange }: HeaderProps) => {
                 className="pl-10 w-64"
               />
             </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <Download className="h-4 w-4" />
+                  Export
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={onExportExcel}>
+                  <FileSpreadsheet className="h-4 w-4 mr-2" />
+                  Export to Excel
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={onExportGoogleSheets}>
+                  <FileSpreadsheet className="h-4 w-4 mr-2" />
+                  Export to Google Sheets
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
             <Button onClick={onAddAsset} className="gap-2">
               <Plus className="h-4 w-4" />
               Add Asset
