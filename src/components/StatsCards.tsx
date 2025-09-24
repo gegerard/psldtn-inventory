@@ -1,0 +1,71 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Monitor, HardDrive, Cpu, Zap } from "lucide-react";
+import { Asset } from "@/types/asset";
+
+interface StatsCardsProps {
+  assets: Asset[];
+}
+
+const StatsCards = ({ assets }: StatsCardsProps) => {
+  const totalAssets = assets.length;
+  const activeAssets = assets.filter(asset => asset.status === 'active').length;
+  const inMaintenanceAssets = assets.filter(asset => asset.status === 'maintenance').length;
+  const retiredAssets = assets.filter(asset => asset.status === 'retired').length;
+
+  const stats = [
+    {
+      title: "Total Assets",
+      value: totalAssets,
+      icon: Monitor,
+      color: "bg-gradient-to-br from-primary/10 to-info/5",
+      iconColor: "text-primary",
+    },
+    {
+      title: "Active",
+      value: activeAssets,
+      icon: Zap,
+      color: "bg-gradient-to-br from-success/10 to-success/5",
+      iconColor: "text-success",
+    },
+    {
+      title: "Maintenance",
+      value: inMaintenanceAssets,
+      icon: HardDrive,
+      color: "bg-gradient-to-br from-warning/10 to-warning/5",
+      iconColor: "text-warning",
+    },
+    {
+      title: "Retired",
+      value: retiredAssets,
+      icon: Cpu,
+      color: "bg-gradient-to-br from-muted/20 to-muted/10",
+      iconColor: "text-muted-foreground",
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {stats.map((stat) => {
+        const Icon = stat.icon;
+        return (
+          <Card key={stat.title} className="shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-medium)] transition-[var(--transition-smooth)]">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                {stat.title}
+              </CardTitle>
+              <div className={`p-2 rounded-lg ${stat.color}`}>
+                <Icon className={`h-4 w-4 ${stat.iconColor}`} />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stat.value}</div>
+            </CardContent>
+          </Card>
+        );
+      })}
+    </div>
+  );
+};
+
+export default StatsCards;
