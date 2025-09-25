@@ -14,7 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      assets: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          id: string
+          location: string
+          manufacturer: string
+          model: string
+          name: string
+          notes: string | null
+          purchase_date: string
+          serial_number: string
+          specifications: Json | null
+          status: string
+          type: string
+          updated_at: string
+          warranty_expiry: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          id?: string
+          location: string
+          manufacturer: string
+          model: string
+          name: string
+          notes?: string | null
+          purchase_date: string
+          serial_number: string
+          specifications?: Json | null
+          status: string
+          type: string
+          updated_at?: string
+          warranty_expiry?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          id?: string
+          location?: string
+          manufacturer?: string
+          model?: string
+          name?: string
+          notes?: string | null
+          purchase_date?: string
+          serial_number?: string
+          specifications?: Json | null
+          status?: string
+          type?: string
+          updated_at?: string
+          warranty_expiry?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

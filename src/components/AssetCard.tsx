@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Asset } from "@/types/asset";
+import { LegacyAsset as Asset } from "@/types/asset";
 import { Monitor, Laptop, Server, HardDrive, Edit, Eye, Calendar, MapPin, User } from "lucide-react";
 
 interface AssetCardProps {

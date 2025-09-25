@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Asset } from "@/types/asset";
+import { LegacyAsset as Asset } from "@/types/asset";
 import { 
   Monitor, 
   Laptop, 
