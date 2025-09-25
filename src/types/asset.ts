@@ -72,7 +72,7 @@ export const convertToLegacyFormat = (asset: Asset): LegacyAsset => ({
   lastUpdated: asset.updated_at,
 });
 
-export const convertFromLegacyFormat = (legacyAsset: AssetFormData): Omit<Asset, 'id' | 'created_at' | 'updated_at'> => ({
+export const convertFromLegacyFormat = (legacyAsset: AssetFormData): Omit<Asset, 'id' | 'created_at' | 'updated_at'> & { user_id?: string } => ({
   name: legacyAsset.name,
   type: legacyAsset.type,
   status: legacyAsset.status,

@@ -30,6 +30,7 @@ export type Database = {
           status: string
           type: string
           updated_at: string
+          user_id: string | null
           warranty_expiry: string | null
         }
         Insert: {
@@ -47,6 +48,7 @@ export type Database = {
           status: string
           type: string
           updated_at?: string
+          user_id?: string | null
           warranty_expiry?: string | null
         }
         Update: {
@@ -64,7 +66,32 @@ export type Database = {
           status?: string
           type?: string
           updated_at?: string
+          user_id?: string | null
           warranty_expiry?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
         }
         Relationships: []
       }

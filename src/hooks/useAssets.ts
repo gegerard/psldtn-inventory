@@ -38,9 +38,10 @@ export const useAssets = () => {
   };
 
   // Add new asset
-  const addAsset = async (assetData: AssetFormData) => {
+  const addAsset = async (assetData: AssetFormData, userId: string) => {
     try {
       const dbAsset = convertFromLegacyFormat(assetData);
+      dbAsset.user_id = userId;
       
       const { data, error } = await supabase
         .from('assets')
@@ -58,7 +59,6 @@ export const useAssets = () => {
         description: `${assetData.name} has been added successfully.`,
       });
     } catch (err) {
-      console.error('Error adding asset:', err);
       toast({
         title: "Error",
         description: "Failed to add asset to database",

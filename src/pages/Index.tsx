@@ -1,27 +1,41 @@
-import { useState, useMemo } from "react";
-import { LegacyAsset as Asset, AssetFormData } from "@/types/asset";
-import { useAssets } from "@/hooks/useAssets";
+import React, { useState, useMemo, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { PlusCircle, Download, Zap, FileSpreadsheet, LogOut } from "lucide-react";
 import Header from "@/components/Header";
 import StatsCards from "@/components/StatsCards";
 import AssetCard from "@/components/AssetCard";
 import AssetForm from "@/components/AssetForm";
 import AssetDetail from "@/components/AssetDetail";
 import ExportDialog from "@/components/ExportDialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { toast } from "@/hooks/use-toast";
+import { useAssets } from "@/hooks/useAssets";
+import { useAuth } from "@/hooks/useAuth";
+import { AssetFormData, LegacyAsset } from "@/types/asset";
 
 const Index = () => {
-  const { assets, loading, addAsset, updateAsset } = useAssets();
-
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
-  const [editingAsset, setEditingAsset] = useState<Asset | null>(null);
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState<LegacyAsset | null>(null);
+  const [editingAsset, setEditingAsset] = useState<LegacyAsset | null>(null);
 
+  const { user, loading: authLoading, signOut } = useAuth();
+  const { assets, loading, error, addAsset, updateAsset, deleteAsset } = useAssets();
+  const navigate = useNavigate();
+
+  // Redirect to auth if not logged in
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/auth');
+    }
+  }, [user, authLoading, navigate]);
+
+  // Filter assets based on search and filter criteria
   const filteredAssets = useMemo(() => {
     return assets.filter(asset => {
       const matchesSearch = asset.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -41,24 +55,27 @@ const Index = () => {
     setIsFormOpen(true);
   };
 
-  const handleEditAsset = (asset: Asset) => {
+  const handleEditAsset = (asset: LegacyAsset) => {
     setEditingAsset(asset);
     setIsFormOpen(true);
     setIsDetailOpen(false);
   };
 
-  const handleViewAsset = (asset: Asset) => {
+  const handleViewAsset = (asset: LegacyAsset) => {
     setSelectedAsset(asset);
     setIsDetailOpen(true);
   };
 
   const handleSaveAsset = async (assetData: AssetFormData) => {
+    if (!user) return;
+    
     if (editingAsset) {
       await updateAsset(editingAsset.id, assetData);
     } else {
-      await addAsset(assetData);
+      await addAsset(assetData, user.id);
     }
     setIsFormOpen(false);
+    setEditingAsset(null);
   };
 
   const handleExportExcel = () => {
@@ -72,11 +89,6 @@ const Index = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
-    toast({
-      title: "Export successful",
-      description: "Assets exported to CSV file",
-    });
   };
 
   const handleExportGoogleSheets = () => {
@@ -85,7 +97,7 @@ const Index = () => {
 
   const handleZapierExport = async (webhookUrl: string) => {
     try {
-      const response = await fetch(webhookUrl, {
+      await fetch(webhookUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -97,22 +109,12 @@ const Index = () => {
           triggered_from: window.location.origin,
         }),
       });
-
-      toast({
-        title: "Export sent",
-        description: "Data sent to Google Sheets via Zapier. Check your Zap history to confirm.",
-      });
     } catch (error) {
-      console.error("Error triggering webhook:", error);
-      toast({
-        title: "Error",
-        description: "Failed to export to Google Sheets. Please check the webhook URL.",
-        variant: "destructive",
-      });
+      // Handle error silently for webhook calls
     }
   };
 
-  const generateCSV = (assets: Asset[]) => {
+  const generateCSV = (assets: LegacyAsset[]) => {
     const headers = [
       'Name', 'Type', 'Status', 'Serial Number', 'Manufacturer', 'Model',
       'Purchase Date', 'Warranty Expiry', 'Location', 'Assigned To',
@@ -147,20 +149,95 @@ const Index = () => {
     ).join('\n');
   };
 
+  // Show loading while checking auth
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if not authenticated (will redirect)
+  if (!user) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-background">
-      <Header 
-        onAddAsset={handleAddAsset}
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        onExportExcel={handleExportExcel}
-        onExportGoogleSheets={handleExportGoogleSheets}
-      />
+      <div className="bg-card border-b">
+        <div className="container mx-auto px-4 py-4">
+          <h1 className="text-2xl font-bold text-foreground">Asset Management</h1>
+        </div>
+      </div>
       
-      <main className="container mx-auto px-6 py-8">
+      <main className="container mx-auto px-4 py-8">
+        <div className="flex flex-col lg:flex-row gap-6 mb-8">
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold text-foreground mb-2">Asset Management</h1>
+            <p className="text-muted-foreground">Track and manage your IT assets efficiently</p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+              onClick={handleAddAsset}
+              className="flex items-center gap-2"
+            >
+              <PlusCircle className="h-4 w-4" />
+              Add Asset
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              onClick={handleExportExcel}
+              className="flex items-center gap-2"
+            >
+              <FileSpreadsheet className="h-4 w-4" />
+              Export CSV
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              onClick={handleExportGoogleSheets}
+              className="flex items-center gap-2"
+            >
+              <Download className="h-4 w-4" />
+              Google Sheets
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              onClick={handleExportGoogleSheets}
+              className="flex items-center gap-2"
+            >
+              <Zap className="h-4 w-4" />
+              Zapier Export
+            </Button>
+
+            <Button 
+              variant="outline" 
+              onClick={signOut}
+              className="flex items-center gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              Sign Out
+            </Button>
+          </div>
+        </div>
+
         <StatsCards assets={assets} />
         
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <Input
+            placeholder="Search assets..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full sm:w-64"
+          />
+          
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="Filter by status" />
@@ -189,6 +266,7 @@ const Index = () => {
 
         {loading ? (
           <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
             <p className="text-xl text-muted-foreground mb-4">Loading assets...</p>
           </div>
         ) : filteredAssets.length === 0 ? (
