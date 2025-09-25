@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Monitor, HardDrive, Cpu, Zap } from "lucide-react";
-import { Asset } from "@/types/asset";
+import { LegacyAsset } from "@/types/asset";
 
 interface StatsCardsProps {
-  assets: Asset[];
+  assets: LegacyAsset[];
 }
 
 const StatsCards = ({ assets }: StatsCardsProps) => {
