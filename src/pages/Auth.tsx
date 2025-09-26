@@ -86,34 +86,35 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-8">
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader className="text-center space-y-2 pb-6">
+          <CardTitle className="text-2xl sm:text-3xl font-bold">
             {isSignUp ? 'Create Account' : 'Sign In'}
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-sm sm:text-base">
             {isSignUp 
               ? 'Create your account to start managing assets' 
               : 'Welcome back! Please sign in to your account'
             }
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-6 pb-6">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
               {isSignUp && (
                 <FormField
                   control={form.control}
                   name="fullName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Full Name</FormLabel>
+                      <FormLabel className="text-sm font-medium">Full Name</FormLabel>
                       <FormControl>
                         <Input 
                           placeholder="Enter your full name" 
                           {...field} 
                           disabled={loading}
+                          className="h-11 text-base"
                         />
                       </FormControl>
                       <FormMessage />
@@ -127,13 +128,16 @@ const Auth = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel className="text-sm font-medium">Email</FormLabel>
                     <FormControl>
                       <Input 
                         type="email"
                         placeholder="Enter your email" 
                         {...field} 
                         disabled={loading}
+                        className="h-11 text-base"
+                        autoComplete="email"
+                        autoCapitalize="none"
                       />
                     </FormControl>
                     <FormMessage />
@@ -146,13 +150,15 @@ const Auth = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel className="text-sm font-medium">Password</FormLabel>
                     <FormControl>
                       <Input 
                         type="password"
                         placeholder="Enter your password" 
                         {...field} 
                         disabled={loading}
+                        className="h-11 text-base"
+                        autoComplete={isSignUp ? "new-password" : "current-password"}
                       />
                     </FormControl>
                     <FormMessage />
@@ -160,18 +166,18 @@ const Auth = () => {
                 )}
               />
 
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button type="submit" className="w-full h-11 text-base font-medium mt-6" disabled={loading}>
                 {loading ? 'Please wait...' : (isSignUp ? 'Create Account' : 'Sign In')}
               </Button>
             </form>
           </Form>
 
-          <div className="text-center mt-4">
+          <div className="text-center mt-6 pt-4 border-t">
             <Button
               variant="link"
               onClick={() => setIsSignUp(!isSignUp)}
               disabled={loading}
-              className="text-sm"
+              className="text-sm h-auto p-0 font-normal"
             >
               {isSignUp 
                 ? 'Already have an account? Sign in' 
