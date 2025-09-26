@@ -19,6 +19,7 @@ export type Database = {
           assigned_to: string | null
           created_at: string
           id: string
+          ip_address: unknown | null
           location: string
           manufacturer: string
           model: string
@@ -37,6 +38,7 @@ export type Database = {
           assigned_to?: string | null
           created_at?: string
           id?: string
+          ip_address?: unknown | null
           location: string
           manufacturer: string
           model: string
@@ -55,6 +57,7 @@ export type Database = {
           assigned_to?: string | null
           created_at?: string
           id?: string
+          ip_address?: unknown | null
           location?: string
           manufacturer?: string
           model?: string

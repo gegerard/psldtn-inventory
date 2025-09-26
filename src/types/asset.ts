@@ -10,6 +10,7 @@ export interface Asset {
   warranty_expiry?: string;
   location: string;
   assigned_to?: string;
+  ip_address?: string;
   specifications: {
     cpu?: string;
     ram?: string;
@@ -38,6 +39,7 @@ export interface LegacyAsset {
   warrantyExpiry?: string;
   location: string;
   assignedTo?: string;
+  ipAddress?: string;
   specifications: {
     cpu?: string;
     ram?: string;
@@ -67,6 +69,7 @@ export const convertToLegacyFormat = (asset: Asset): LegacyAsset => ({
   warrantyExpiry: asset.warranty_expiry,
   location: asset.location,
   assignedTo: asset.assigned_to,
+  ipAddress: asset.ip_address,
   specifications: asset.specifications,
   notes: asset.notes,
   lastUpdated: asset.updated_at,
@@ -83,6 +86,7 @@ export const convertFromLegacyFormat = (legacyAsset: AssetFormData): Omit<Asset,
   warranty_expiry: legacyAsset.warrantyExpiry,
   location: legacyAsset.location,
   assigned_to: legacyAsset.assignedTo,
+  ip_address: legacyAsset.ipAddress,
   specifications: legacyAsset.specifications,
   notes: legacyAsset.notes,
 });

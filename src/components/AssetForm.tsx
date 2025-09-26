@@ -26,6 +26,7 @@ const AssetForm = ({ isOpen, onClose, onSave, asset }: AssetFormProps) => {
     warrantyExpiry: asset?.warrantyExpiry || "",
     location: asset?.location || "",
     assignedTo: asset?.assignedTo || "",
+    ipAddress: asset?.ipAddress || "",
     specifications: {
       cpu: asset?.specifications.cpu || "",
       ram: asset?.specifications.ram || "",
@@ -172,6 +173,16 @@ const AssetForm = ({ isOpen, onClose, onSave, asset }: AssetFormProps) => {
                 id="assignedTo"
                 value={formData.assignedTo}
                 onChange={(e) => handleInputChange('assignedTo', e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="ipAddress">IP Address</Label>
+              <Input
+                id="ipAddress"
+                value={formData.ipAddress}
+                onChange={(e) => handleInputChange('ipAddress', e.target.value)}
+                placeholder="e.g., 192.168.1.100"
               />
             </div>
           </div>
