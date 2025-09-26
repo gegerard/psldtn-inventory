@@ -138,6 +138,17 @@ const AssetDetail = ({ asset, isOpen, onClose, onEdit }: AssetDetailProps) => {
                     <span className="col-span-2 font-medium">{asset.assignedTo}</span>
                   </div>
                 )}
+                {asset.ipAddress && (
+                  <div className="grid grid-cols-3 gap-2">
+                    <span className="text-muted-foreground flex items-center gap-1">
+                      <Network className="h-4 w-4" />
+                      IP Address:
+                    </span>
+                    <span className="col-span-2 font-mono text-sm bg-muted px-2 py-1 rounded">
+                      {asset.ipAddress}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
