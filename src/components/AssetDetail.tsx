@@ -60,31 +60,31 @@ const AssetDetail = ({ asset, isOpen, onClose, onEdit }: AssetDetailProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto mx-4 w-[calc(100vw-2rem)] sm:w-full">
         <DialogHeader>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-gradient-to-br from-primary/10 to-info/5">
-                <TypeIcon className="h-6 w-6 text-primary" />
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              <div className="p-2 sm:p-3 rounded-lg bg-gradient-to-br from-primary/10 to-info/5 flex-shrink-0">
+                <TypeIcon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
               </div>
-              <div>
-                <DialogTitle className="text-2xl font-bold">{asset.name}</DialogTitle>
-                <p className="text-muted-foreground">{asset.manufacturer} {asset.model}</p>
+              <div className="min-w-0 flex-1">
+                <DialogTitle className="text-xl sm:text-2xl font-bold truncate">{asset.name}</DialogTitle>
+                <p className="text-sm sm:text-base text-muted-foreground truncate">{asset.manufacturer} {asset.model}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-shrink-0 w-full sm:w-auto">
               <Badge className={getStatusColor(asset.status)} variant="secondary">
                 {asset.status}
               </Badge>
-              <Button onClick={() => onEdit(asset)} className="gap-2">
+              <Button onClick={() => onEdit(asset)} className="gap-2 h-9 sm:h-10 flex-1 sm:flex-initial">
                 <Edit className="h-4 w-4" />
-                Edit
+                <span className="sm:inline">Edit</span>
               </Button>
             </div>
           </div>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           <div className="space-y-6">
             <div className="bg-card border rounded-lg p-4">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -92,9 +92,9 @@ const AssetDetail = ({ asset, isOpen, onClose, onEdit }: AssetDetailProps) => {
                 Basic Information
               </h3>
               <div className="space-y-3">
-                <div className="grid grid-cols-3 gap-2">
-                  <span className="text-muted-foreground">Type:</span>
-                  <span className="col-span-2 font-medium capitalize">{asset.type}</span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <span className="text-muted-foreground font-medium">Type:</span>
+                  <span className="sm:col-span-2 font-medium capitalize">{asset.type}</span>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   <span className="text-muted-foreground">Serial:</span>

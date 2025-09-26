@@ -58,20 +58,21 @@ const AssetForm = ({ isOpen, onClose, onSave, asset }: AssetFormProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto mx-4 w-[calc(100vw-2rem)] sm:w-full">
         <DialogHeader>
-          <DialogTitle>{asset ? 'Edit Asset' : 'Add New Asset'}</DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">{asset ? 'Edit Asset' : 'Add New Asset'}</DialogTitle>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Asset Name *</Label>
+              <Label htmlFor="name" className="text-sm font-medium">Asset Name *</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 required
+                className="h-11 text-base"
               />
             </div>
             
@@ -176,8 +177,8 @@ const AssetForm = ({ isOpen, onClose, onSave, asset }: AssetFormProps) => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Specifications</h3>
-            <div className="grid grid-cols-2 gap-4">
+            <h3 className="text-base sm:text-lg font-semibold">Specifications</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="cpu">CPU</Label>
                 <Input
@@ -271,11 +272,11 @@ const AssetForm = ({ isOpen, onClose, onSave, asset }: AssetFormProps) => {
             />
           </div>
 
-          <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={onClose}>
+          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
+            <Button type="button" variant="outline" onClick={onClose} className="h-11">
               Cancel
             </Button>
-            <Button type="submit">
+            <Button type="submit" className="h-11">
               {asset ? 'Update Asset' : 'Add Asset'}
             </Button>
           </div>

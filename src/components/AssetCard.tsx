@@ -94,14 +94,14 @@ const AssetCard = ({ asset, onEdit, onView }: AssetCardProps) => {
           </div>
         )}
 
-        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-[var(--transition-smooth)]">
-          <Button variant="outline" size="sm" onClick={() => onView(asset)} className="flex-1 gap-2">
+        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-[var(--transition-smooth)] sm:opacity-100">
+          <Button variant="outline" size="sm" onClick={() => onView(asset)} className="flex-1 gap-1 sm:gap-2 h-9">
             <Eye className="h-4 w-4" />
-            View
+            <span className="text-xs sm:text-sm">View</span>
           </Button>
-          <Button variant="outline" size="sm" onClick={() => onEdit(asset)} className="flex-1 gap-2">
+          <Button variant="outline" size="sm" onClick={() => onEdit(asset)} className="flex-1 gap-1 sm:gap-2 h-9">
             <Edit className="h-4 w-4" />
-            Edit
+            <span className="text-xs sm:text-sm">Edit</span>
           </Button>
         </div>
       </CardContent>

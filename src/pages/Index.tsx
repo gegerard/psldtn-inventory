@@ -170,98 +170,106 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <div className="bg-card border-b">
         <div className="container mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold text-foreground">Asset Management</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground">Asset Management</h1>
         </div>
       </div>
       
-      <main className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-6 mb-8">
+      <main className="container mx-auto px-4 py-6 sm:py-8">
+        <div className="flex flex-col gap-4 sm:gap-6 mb-6 sm:mb-8">
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-foreground mb-2">Asset Management</h1>
-            <p className="text-muted-foreground">Track and manage your IT assets efficiently</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Asset Management</h1>
+            <p className="text-sm sm:text-base text-muted-foreground">Track and manage your IT assets efficiently</p>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button
-              onClick={handleAddAsset}
-              className="flex items-center gap-2"
-            >
-              <PlusCircle className="h-4 w-4" />
-              Add Asset
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              onClick={handleExportExcel}
-              className="flex items-center gap-2"
-            >
-              <FileSpreadsheet className="h-4 w-4" />
-              Export CSV
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              onClick={handleExportGoogleSheets}
-              className="flex items-center gap-2"
-            >
-              <Download className="h-4 w-4" />
-              Google Sheets
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              onClick={handleExportGoogleSheets}
-              className="flex items-center gap-2"
-            >
-              <Zap className="h-4 w-4" />
-              Zapier Export
-            </Button>
+          <div className="flex flex-col gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
+              <Button
+                onClick={handleAddAsset}
+                className="flex items-center justify-center gap-2 h-11 text-sm font-medium col-span-2 sm:col-span-1"
+              >
+                <PlusCircle className="h-4 w-4" />
+                Add Asset
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                onClick={handleExportExcel}
+                className="flex items-center justify-center gap-2 h-11 text-sm"
+              >
+                <FileSpreadsheet className="h-4 w-4" />
+                <span className="hidden sm:inline">Export CSV</span>
+                <span className="sm:hidden">CSV</span>
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                onClick={handleExportGoogleSheets}
+                className="flex items-center justify-center gap-2 h-11 text-sm"
+              >
+                <Download className="h-4 w-4" />
+                <span className="hidden sm:inline">Google Sheets</span>
+                <span className="sm:hidden">Sheets</span>
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                onClick={handleExportGoogleSheets}
+                className="flex items-center justify-center gap-2 h-11 text-sm"
+              >
+                <Zap className="h-4 w-4" />
+                <span className="hidden sm:inline">Zapier Export</span>
+                <span className="sm:hidden">Zapier</span>
+              </Button>
 
-            <Button 
-              variant="outline" 
-              onClick={signOut}
-              className="flex items-center gap-2"
-            >
-              <LogOut className="h-4 w-4" />
-              Sign Out
-            </Button>
+              <Button 
+                variant="outline" 
+                onClick={signOut}
+                className="flex items-center justify-center gap-2 h-11 text-sm"
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="hidden sm:inline">Sign Out</span>
+                <span className="sm:hidden">Out</span>
+              </Button>
+            </div>
           </div>
         </div>
 
         <StatsCards assets={assets} />
         
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+        <div className="flex flex-col gap-4 mb-6">
           <Input
             placeholder="Search assets..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full sm:w-64"
+            className="w-full h-11 text-base"
           />
           
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full sm:w-48">
-              <SelectValue placeholder="Filter by status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="maintenance">Maintenance</SelectItem>
-              <SelectItem value="retired">Retired</SelectItem>
-            </SelectContent>
-          </Select>
-          
-          <Select value={typeFilter} onValueChange={setTypeFilter}>
-            <SelectTrigger className="w-full sm:w-48">
-              <SelectValue placeholder="Filter by type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="desktop">Desktop</SelectItem>
-              <SelectItem value="laptop">Laptop</SelectItem>
-              <SelectItem value="server">Server</SelectItem>
-              <SelectItem value="other">Other</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-full h-11">
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="maintenance">Maintenance</SelectItem>
+                <SelectItem value="retired">Retired</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <Select value={typeFilter} onValueChange={setTypeFilter}>
+              <SelectTrigger className="w-full h-11">
+                <SelectValue placeholder="Filter by type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="desktop">Desktop</SelectItem>
+                <SelectItem value="laptop">Laptop</SelectItem>
+                <SelectItem value="server">Server</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {loading ? (
