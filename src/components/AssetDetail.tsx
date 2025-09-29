@@ -1,4 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { LegacyAsset as Asset } from "@/types/asset";
@@ -12,6 +13,7 @@ import {
   User, 
   Shield, 
   Edit,
+  Trash2,
   Cpu,
   MemoryStick,
   HardDriveIcon,
@@ -25,9 +27,10 @@ interface AssetDetailProps {
   isOpen: boolean;
   onClose: () => void;
   onEdit: (asset: Asset) => void;
+  onDelete: (assetId: string) => void;
 }
 
-const AssetDetail = ({ asset, isOpen, onClose, onEdit }: AssetDetailProps) => {
+const AssetDetail = ({ asset, isOpen, onClose, onEdit, onDelete }: AssetDetailProps) => {
   if (!asset) return null;
 
   const getTypeIcon = (type: string) => {
@@ -76,10 +79,40 @@ const AssetDetail = ({ asset, isOpen, onClose, onEdit }: AssetDetailProps) => {
               <Badge className={getStatusColor(asset.status)} variant="secondary">
                 {asset.status}
               </Badge>
-              <Button onClick={() => onEdit(asset)} className="gap-2 h-9 sm:h-10 flex-1 sm:flex-initial">
-                <Edit className="h-4 w-4" />
-                <span className="sm:inline">Edit</span>
-              </Button>
+              <div className="flex gap-2 flex-1 sm:flex-initial">
+                <Button onClick={() => onEdit(asset)} className="gap-2 h-9 sm:h-10 flex-1 sm:flex-initial">
+                  <Edit className="h-4 w-4" />
+                  <span className="sm:inline">Edit</span>
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" className="gap-2 h-9 sm:h-10 flex-1 sm:flex-initial">
+                      <Trash2 className="h-4 w-4" />
+                      <span className="sm:inline">Delete</span>
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete Asset</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to delete "{asset.name}"? This action cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => {
+                          onDelete(asset.id);
+                          onClose();
+                        }}
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      >
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             </div>
           </div>
         </DialogHeader>

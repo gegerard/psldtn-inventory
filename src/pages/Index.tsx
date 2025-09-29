@@ -313,6 +313,7 @@ const Index = () => {
         isOpen={isDetailOpen}
         onClose={() => setIsDetailOpen(false)}
         onEdit={handleEditAsset}
+        onDelete={deleteAsset}
       />
 
       <ExportDialog
