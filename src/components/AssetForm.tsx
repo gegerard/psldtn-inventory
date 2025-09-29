@@ -27,6 +27,7 @@ const AssetForm = ({ isOpen, onClose, onSave, asset }: AssetFormProps) => {
     location: asset?.location || "",
     assignedTo: asset?.assignedTo || "",
     ipAddress: asset?.ipAddress || "",
+    remoteId: asset?.remoteId || "",
     specifications: {
       cpu: asset?.specifications.cpu || "",
       ram: asset?.specifications.ram || "",
@@ -183,6 +184,16 @@ const AssetForm = ({ isOpen, onClose, onSave, asset }: AssetFormProps) => {
                 value={formData.ipAddress}
                 onChange={(e) => handleInputChange('ipAddress', e.target.value)}
                 placeholder="e.g., 192.168.1.100"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="remoteId">Remote ID</Label>
+              <Input
+                id="remoteId"
+                value={formData.remoteId}
+                onChange={(e) => handleInputChange('remoteId', e.target.value)}
+                placeholder="e.g., RDP-001, VNC-002"
               />
             </div>
           </div>

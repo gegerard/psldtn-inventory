@@ -26,6 +26,7 @@ export type Database = {
           name: string
           notes: string | null
           purchase_date: string
+          remote_id: string | null
           serial_number: string
           specifications: Json | null
           status: string
@@ -45,6 +46,7 @@ export type Database = {
           name: string
           notes?: string | null
           purchase_date: string
+          remote_id?: string | null
           serial_number: string
           specifications?: Json | null
           status: string
@@ -64,6 +66,7 @@ export type Database = {
           name?: string
           notes?: string | null
           purchase_date?: string
+          remote_id?: string | null
           serial_number?: string
           specifications?: Json | null
           status?: string

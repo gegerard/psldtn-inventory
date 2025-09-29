@@ -182,6 +182,17 @@ const AssetDetail = ({ asset, isOpen, onClose, onEdit, onDelete }: AssetDetailPr
                     </span>
                   </div>
                 )}
+                {asset.remoteId && (
+                  <div className="grid grid-cols-3 gap-2">
+                    <span className="text-muted-foreground flex items-center gap-1">
+                      <Network className="h-4 w-4" />
+                      Remote ID:
+                    </span>
+                    <span className="col-span-2 font-mono text-sm bg-muted px-2 py-1 rounded">
+                      {asset.remoteId}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
