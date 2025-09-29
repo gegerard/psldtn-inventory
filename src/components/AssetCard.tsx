@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { LegacyAsset as Asset } from "@/types/asset";
-import { Monitor, Laptop, Server, HardDrive, Edit, Eye, Calendar, MapPin, User } from "lucide-react";
+import { Monitor, Laptop, Server, HardDrive, Edit, Eye, Calendar, MapPin, User, Globe } from "lucide-react";
 
 interface AssetCardProps {
   asset: Asset;
@@ -79,6 +79,16 @@ const AssetCard = ({ asset, onEdit, onView }: AssetCardProps) => {
                 <span className="text-muted-foreground">Assigned to</span>
               </div>
               <span className="font-medium">{asset.assignedTo}</span>
+            </>
+          )}
+          
+          {asset.ipAddress && (
+            <>
+              <div className="flex items-center gap-2">
+                <Globe className="h-4 w-4 text-muted-foreground" />
+                <span className="text-muted-foreground">IP Address</span>
+              </div>
+              <span className="font-medium font-mono text-sm">{asset.ipAddress}</span>
             </>
           )}
         </div>
