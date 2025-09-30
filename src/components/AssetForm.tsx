@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,31 +16,91 @@ interface AssetFormProps {
 
 const AssetForm = ({ isOpen, onClose, onSave, asset }: AssetFormProps) => {
   const [formData, setFormData] = useState<AssetFormData>({
-    name: asset?.name || "",
-    type: asset?.type || "desktop",
-    status: asset?.status || "active",
-    serialNumber: asset?.serialNumber || "",
-    manufacturer: asset?.manufacturer || "",
-    model: asset?.model || "",
-    purchaseDate: asset?.purchaseDate || "",
-    warrantyExpiry: asset?.warrantyExpiry || "",
-    location: asset?.location || "",
-    assignedTo: asset?.assignedTo || "",
-    ipAddress: asset?.ipAddress || "",
-    remoteId: asset?.remoteId || "",
-    division: asset?.division || "",
+    name: "",
+    type: "desktop",
+    status: "active",
+    serialNumber: "",
+    manufacturer: "",
+    model: "",
+    purchaseDate: "",
+    warrantyExpiry: "",
+    location: "",
+    assignedTo: "",
+    ipAddress: "",
+    remoteId: "",
+    division: "",
     specifications: {
-      cpu: asset?.specifications.cpu || "",
-      ram: asset?.specifications.ram || "",
-      storage: asset?.specifications.storage || "",
-      storage2: asset?.specifications.storage2 || "",
-      storage3: asset?.specifications.storage3 || "",
-      graphics: asset?.specifications.graphics || "",
-      operatingSystem: asset?.specifications.operatingSystem || "",
-      network: asset?.specifications.network || "",
+      cpu: "",
+      ram: "",
+      storage: "",
+      storage2: "",
+      storage3: "",
+      graphics: "",
+      operatingSystem: "",
+      network: "",
     },
-    notes: asset?.notes || "",
+    notes: "",
   });
+
+  // Update form data when asset prop changes
+  useEffect(() => {
+    if (asset) {
+      setFormData({
+        name: asset.name || "",
+        type: asset.type || "desktop",
+        status: asset.status || "active",
+        serialNumber: asset.serialNumber || "",
+        manufacturer: asset.manufacturer || "",
+        model: asset.model || "",
+        purchaseDate: asset.purchaseDate || "",
+        warrantyExpiry: asset.warrantyExpiry || "",
+        location: asset.location || "",
+        assignedTo: asset.assignedTo || "",
+        ipAddress: asset.ipAddress || "",
+        remoteId: asset.remoteId || "",
+        division: asset.division || "",
+        specifications: {
+          cpu: asset.specifications?.cpu || "",
+          ram: asset.specifications?.ram || "",
+          storage: asset.specifications?.storage || "",
+          storage2: asset.specifications?.storage2 || "",
+          storage3: asset.specifications?.storage3 || "",
+          graphics: asset.specifications?.graphics || "",
+          operatingSystem: asset.specifications?.operatingSystem || "",
+          network: asset.specifications?.network || "",
+        },
+        notes: asset.notes || "",
+      });
+    } else {
+      // Reset form for new asset
+      setFormData({
+        name: "",
+        type: "desktop",
+        status: "active",
+        serialNumber: "",
+        manufacturer: "",
+        model: "",
+        purchaseDate: "",
+        warrantyExpiry: "",
+        location: "",
+        assignedTo: "",
+        ipAddress: "",
+        remoteId: "",
+        division: "",
+        specifications: {
+          cpu: "",
+          ram: "",
+          storage: "",
+          storage2: "",
+          storage3: "",
+          graphics: "",
+          operatingSystem: "",
+          network: "",
+        },
+        notes: "",
+      });
+    }
+  }, [asset]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
