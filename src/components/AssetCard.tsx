@@ -91,6 +91,16 @@ const AssetCard = ({ asset, onEdit, onView }: AssetCardProps) => {
               <span className="font-medium font-mono text-sm">{asset.ipAddress}</span>
             </>
           )}
+
+          {asset.division && (
+            <>
+              <div className="flex items-center gap-2">
+                <HardDrive className="h-4 w-4 text-muted-foreground" />
+                <span className="text-muted-foreground">Division</span>
+              </div>
+              <span className="font-medium">{asset.division}</span>
+            </>
+          )}
         </div>
 
         {asset.specifications.cpu && (

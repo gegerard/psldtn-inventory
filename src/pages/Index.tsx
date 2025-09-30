@@ -18,6 +18,7 @@ const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<string>("name");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
@@ -35,9 +36,9 @@ const Index = () => {
     }
   }, [user, authLoading, navigate]);
 
-  // Filter assets based on search and filter criteria
+  // Filter and sort assets based on search, filter and sort criteria
   const filteredAssets = useMemo(() => {
-    return assets.filter(asset => {
+    const filtered = assets.filter(asset => {
       const matchesSearch = asset.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            asset.manufacturer.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            asset.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -48,7 +49,29 @@ const Index = () => {
       
       return matchesSearch && matchesStatus && matchesType;
     });
-  }, [assets, searchTerm, statusFilter, typeFilter]);
+
+    // Sort assets based on selected criteria
+    return filtered.sort((a, b) => {
+      switch (sortBy) {
+        case "name":
+          return a.name.localeCompare(b.name);
+        case "type":
+          return a.type.localeCompare(b.type);
+        case "status":
+          return a.status.localeCompare(b.status);
+        case "location":
+          return a.location.localeCompare(b.location);
+        case "division":
+          return (a.division || "").localeCompare(b.division || "");
+        case "manufacturer":
+          return a.manufacturer.localeCompare(b.manufacturer);
+        case "purchaseDate":
+          return new Date(a.purchaseDate).getTime() - new Date(b.purchaseDate).getTime();
+        default:
+          return 0;
+      }
+    });
+  }, [assets, searchTerm, statusFilter, typeFilter, sortBy]);
 
   const handleAddAsset = () => {
     setEditingAsset(null);
@@ -117,7 +140,7 @@ const Index = () => {
   const generateCSV = (assets: LegacyAsset[]) => {
     const headers = [
       'Name', 'Type', 'Status', 'Serial Number', 'Manufacturer', 'Model',
-      'Purchase Date', 'Warranty Expiry', 'Location', 'Assigned To',
+      'Purchase Date', 'Warranty Expiry', 'Location', 'Assigned To', 'Division',
       'CPU', 'RAM', 'Primary Storage', 'Secondary Storage', 'Additional Storage',
       'Graphics', 'Operating System', 'Network', 'Notes'
     ];
@@ -133,6 +156,7 @@ const Index = () => {
       asset.warrantyExpiry || '',
       asset.location,
       asset.assignedTo || '',
+      asset.division || '',
       asset.specifications.cpu || '',
       asset.specifications.ram || '',
       asset.specifications.storage || '',
@@ -244,7 +268,7 @@ const Index = () => {
             className="w-full h-11 text-base"
           />
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full h-11">
                 <SelectValue placeholder="Filter by status" />
@@ -267,6 +291,21 @@ const Index = () => {
                 <SelectItem value="laptop">Laptop</SelectItem>
                 <SelectItem value="server">Server</SelectItem>
                 <SelectItem value="other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-full h-11">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="name">Sort by Name</SelectItem>
+                <SelectItem value="type">Sort by Type</SelectItem>
+                <SelectItem value="status">Sort by Status</SelectItem>
+                <SelectItem value="location">Sort by Location</SelectItem>
+                <SelectItem value="division">Sort by Division</SelectItem>
+                <SelectItem value="manufacturer">Sort by Manufacturer</SelectItem>
+                <SelectItem value="purchaseDate">Sort by Purchase Date</SelectItem>
               </SelectContent>
             </Select>
           </div>

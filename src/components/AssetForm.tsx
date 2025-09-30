@@ -28,6 +28,7 @@ const AssetForm = ({ isOpen, onClose, onSave, asset }: AssetFormProps) => {
     assignedTo: asset?.assignedTo || "",
     ipAddress: asset?.ipAddress || "",
     remoteId: asset?.remoteId || "",
+    division: asset?.division || "",
     specifications: {
       cpu: asset?.specifications.cpu || "",
       ram: asset?.specifications.ram || "",
@@ -194,6 +195,16 @@ const AssetForm = ({ isOpen, onClose, onSave, asset }: AssetFormProps) => {
                 value={formData.remoteId}
                 onChange={(e) => handleInputChange('remoteId', e.target.value)}
                 placeholder="e.g., RDP-001, VNC-002"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="division">Division</Label>
+              <Input
+                id="division"
+                value={formData.division}
+                onChange={(e) => handleInputChange('division', e.target.value)}
+                placeholder="e.g., IT, Finance, HR"
               />
             </div>
           </div>

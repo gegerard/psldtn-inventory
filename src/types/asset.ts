@@ -12,6 +12,7 @@ export interface Asset {
   assigned_to?: string;
   ip_address?: string;
   remote_id?: string;
+  division?: string;
   specifications: {
     cpu?: string;
     ram?: string;
@@ -42,6 +43,7 @@ export interface LegacyAsset {
   assignedTo?: string;
   ipAddress?: string;
   remoteId?: string;
+  division?: string;
   specifications: {
     cpu?: string;
     ram?: string;
@@ -73,6 +75,7 @@ export const convertToLegacyFormat = (asset: Asset): LegacyAsset => ({
   assignedTo: asset.assigned_to,
   ipAddress: asset.ip_address,
   remoteId: asset.remote_id,
+  division: asset.division,
   specifications: asset.specifications,
   notes: asset.notes,
   lastUpdated: asset.updated_at,
@@ -91,6 +94,7 @@ export const convertFromLegacyFormat = (legacyAsset: AssetFormData): Omit<Asset,
   assigned_to: legacyAsset.assignedTo,
   ip_address: legacyAsset.ipAddress,
   remote_id: legacyAsset.remoteId,
+  division: legacyAsset.division,
   specifications: legacyAsset.specifications,
   notes: legacyAsset.notes,
 });

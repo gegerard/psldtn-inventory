@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           assigned_to: string | null
           created_at: string
+          division: string | null
           id: string
           ip_address: unknown | null
           location: string
@@ -38,6 +39,7 @@ export type Database = {
         Insert: {
           assigned_to?: string | null
           created_at?: string
+          division?: string | null
           id?: string
           ip_address?: unknown | null
           location: string
@@ -58,6 +60,7 @@ export type Database = {
         Update: {
           assigned_to?: string | null
           created_at?: string
+          division?: string | null
           id?: string
           ip_address?: unknown | null
           location?: string
