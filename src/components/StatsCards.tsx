@@ -24,7 +24,7 @@ interface StatsCardsProps {
 }
 
 const StatsCards = ({ assets, onEditAsset }: StatsCardsProps) => {
-  const [showIpDialog, setShowIpDialog] = useState(false);
+  const [activeDialog, setActiveDialog] = useState<'ip' | 'active' | 'maintenance' | 'retired' | null>(null);
   const [sortColumn, setSortColumn] = useState<'ipAddress' | 'name' | 'assignedTo'>('ipAddress');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   
@@ -44,8 +44,24 @@ const StatsCards = ({ assets, onEditAsset }: StatsCardsProps) => {
     }
   };
 
-  const sortedAssetsWithIp = useMemo(() => {
-    return [...assetsWithIp].sort((a, b) => {
+  const getDialogAssets = () => {
+    switch (activeDialog) {
+      case 'ip':
+        return assetsWithIp;
+      case 'active':
+        return assets.filter(asset => asset.status === 'active');
+      case 'maintenance':
+        return assets.filter(asset => asset.status === 'maintenance');
+      case 'retired':
+        return assets.filter(asset => asset.status === 'retired');
+      default:
+        return [];
+    }
+  };
+
+  const sortedDialogAssets = useMemo(() => {
+    const dialogAssets = getDialogAssets();
+    return [...dialogAssets].sort((a, b) => {
       let aValue = a[sortColumn] || '';
       let bValue = b[sortColumn] || '';
       
@@ -55,7 +71,22 @@ const StatsCards = ({ assets, onEditAsset }: StatsCardsProps) => {
         return bValue.localeCompare(aValue);
       }
     });
-  }, [assetsWithIp, sortColumn, sortDirection]);
+  }, [activeDialog, assets, sortColumn, sortDirection]);
+
+  const getDialogTitle = () => {
+    switch (activeDialog) {
+      case 'ip':
+        return 'Used IP Addresses';
+      case 'active':
+        return 'Active Assets';
+      case 'maintenance':
+        return 'Assets in Maintenance';
+      case 'retired':
+        return 'Retired Assets';
+      default:
+        return '';
+    }
+  };
 
   const SortIcon = ({ column }: { column: 'ipAddress' | 'name' | 'assignedTo' }) => {
     if (sortColumn !== column) return <ArrowUpDown className="h-4 w-4 ml-1" />;
@@ -69,6 +100,7 @@ const StatsCards = ({ assets, onEditAsset }: StatsCardsProps) => {
       icon: Monitor,
       color: "bg-gradient-to-br from-primary/10 to-info/5",
       iconColor: "text-primary",
+      clickable: false,
     },
     {
       title: "Active",
@@ -76,6 +108,8 @@ const StatsCards = ({ assets, onEditAsset }: StatsCardsProps) => {
       icon: Zap,
       color: "bg-gradient-to-br from-success/10 to-success/5",
       iconColor: "text-success",
+      clickable: true,
+      dialogType: 'active' as const,
     },
     {
       title: "Maintenance",
@@ -83,6 +117,8 @@ const StatsCards = ({ assets, onEditAsset }: StatsCardsProps) => {
       icon: HardDrive,
       color: "bg-gradient-to-br from-warning/10 to-warning/5",
       iconColor: "text-warning",
+      clickable: true,
+      dialogType: 'maintenance' as const,
     },
     {
       title: "Retired",
@@ -90,6 +126,8 @@ const StatsCards = ({ assets, onEditAsset }: StatsCardsProps) => {
       icon: Cpu,
       color: "bg-gradient-to-br from-muted/20 to-muted/10",
       iconColor: "text-muted-foreground",
+      clickable: true,
+      dialogType: 'retired' as const,
     },
     {
       title: "Used IP Addresses",
@@ -97,6 +135,8 @@ const StatsCards = ({ assets, onEditAsset }: StatsCardsProps) => {
       icon: Network,
       color: "bg-gradient-to-br from-info/10 to-info/5",
       iconColor: "text-info",
+      clickable: true,
+      dialogType: 'ip' as const,
     },
   ];
 
@@ -104,12 +144,11 @@ const StatsCards = ({ assets, onEditAsset }: StatsCardsProps) => {
     <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mb-6 sm:mb-8">
       {stats.map((stat) => {
         const Icon = stat.icon;
-        const isClickable = stat.title === "Used IP Addresses";
         return (
           <Card 
             key={stat.title} 
-            className={`shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-medium)] transition-[var(--transition-smooth)] ${isClickable ? 'cursor-pointer' : ''}`}
-            onClick={isClickable ? () => setShowIpDialog(true) : undefined}
+            className={`shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-medium)] transition-[var(--transition-smooth)] ${stat.clickable ? 'cursor-pointer' : ''}`}
+            onClick={stat.clickable && stat.dialogType ? () => setActiveDialog(stat.dialogType) : undefined}
           >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -126,25 +165,27 @@ const StatsCards = ({ assets, onEditAsset }: StatsCardsProps) => {
         );
       })}
       
-      <Dialog open={showIpDialog} onOpenChange={setShowIpDialog}>
+      <Dialog open={activeDialog !== null} onOpenChange={(open) => !open && setActiveDialog(null)}>
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Used IP Addresses</DialogTitle>
+            <DialogTitle>{getDialogTitle()}</DialogTitle>
           </DialogHeader>
           <div className="mt-4">
-            {assetsWithIp.length > 0 ? (
+            {sortedDialogAssets.length > 0 ? (
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead 
-                      className="cursor-pointer hover:bg-muted/50 transition-colors"
-                      onClick={() => handleSort('ipAddress')}
-                    >
-                      <div className="flex items-center">
-                        IP Address
-                        <SortIcon column="ipAddress" />
-                      </div>
-                    </TableHead>
+                    {activeDialog === 'ip' && (
+                      <TableHead 
+                        className="cursor-pointer hover:bg-muted/50 transition-colors"
+                        onClick={() => handleSort('ipAddress')}
+                      >
+                        <div className="flex items-center">
+                          IP Address
+                          <SortIcon column="ipAddress" />
+                        </div>
+                      </TableHead>
+                    )}
                     <TableHead 
                       className="cursor-pointer hover:bg-muted/50 transition-colors"
                       onClick={() => handleSort('name')}
@@ -167,9 +208,11 @@ const StatsCards = ({ assets, onEditAsset }: StatsCardsProps) => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {sortedAssetsWithIp.map((asset) => (
+                  {sortedDialogAssets.map((asset) => (
                     <TableRow key={asset.id}>
-                      <TableCell className="font-mono">{asset.ipAddress}</TableCell>
+                      {activeDialog === 'ip' && (
+                        <TableCell className="font-mono">{asset.ipAddress}</TableCell>
+                      )}
                       <TableCell>{asset.name}</TableCell>
                       <TableCell>{asset.assignedTo || '-'}</TableCell>
                       <TableCell>
@@ -177,7 +220,7 @@ const StatsCards = ({ assets, onEditAsset }: StatsCardsProps) => {
                           variant="ghost"
                           size="sm"
                           onClick={() => {
-                            setShowIpDialog(false);
+                            setActiveDialog(null);
                             onEditAsset?.(asset);
                           }}
                           className="h-8 w-8 p-0"
@@ -190,7 +233,9 @@ const StatsCards = ({ assets, onEditAsset }: StatsCardsProps) => {
                 </TableBody>
               </Table>
             ) : (
-              <p className="text-muted-foreground text-center py-8">No IP addresses assigned yet.</p>
+              <p className="text-muted-foreground text-center py-8">
+                No assets found.
+              </p>
             )}
           </div>
         </DialogContent>
