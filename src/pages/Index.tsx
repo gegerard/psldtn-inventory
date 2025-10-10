@@ -258,7 +258,7 @@ const Index = () => {
           </div>
         </div>
 
-        <StatsCards assets={assets} />
+        <StatsCards assets={assets} onEditAsset={handleEditAsset} />
         
         <div className="flex flex-col gap-4 mb-6">
           <Input

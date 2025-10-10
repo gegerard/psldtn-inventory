@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Monitor, HardDrive, Cpu, Zap, Network, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Monitor, HardDrive, Cpu, Zap, Network, ArrowUpDown, ArrowUp, ArrowDown, Pencil } from "lucide-react";
 import { LegacyAsset } from "@/types/asset";
 import {
   Dialog,
@@ -20,9 +20,10 @@ import {
 
 interface StatsCardsProps {
   assets: LegacyAsset[];
+  onEditAsset?: (asset: LegacyAsset) => void;
 }
 
-const StatsCards = ({ assets }: StatsCardsProps) => {
+const StatsCards = ({ assets, onEditAsset }: StatsCardsProps) => {
   const [showIpDialog, setShowIpDialog] = useState(false);
   const [sortColumn, setSortColumn] = useState<'ipAddress' | 'name' | 'assignedTo'>('ipAddress');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -162,6 +163,7 @@ const StatsCards = ({ assets }: StatsCardsProps) => {
                         <SortIcon column="assignedTo" />
                       </div>
                     </TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -170,6 +172,19 @@ const StatsCards = ({ assets }: StatsCardsProps) => {
                       <TableCell className="font-mono">{asset.ipAddress}</TableCell>
                       <TableCell>{asset.name}</TableCell>
                       <TableCell>{asset.assignedTo || '-'}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setShowIpDialog(false);
+                            onEditAsset?.(asset);
+                          }}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
