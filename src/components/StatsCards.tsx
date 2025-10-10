@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Monitor, HardDrive, Cpu, Zap } from "lucide-react";
+import { Monitor, HardDrive, Cpu, Zap, Network } from "lucide-react";
 import { LegacyAsset } from "@/types/asset";
 
 interface StatsCardsProps {
@@ -12,6 +12,7 @@ const StatsCards = ({ assets }: StatsCardsProps) => {
   const activeAssets = assets.filter(asset => asset.status === 'active').length;
   const inMaintenanceAssets = assets.filter(asset => asset.status === 'maintenance').length;
   const retiredAssets = assets.filter(asset => asset.status === 'retired').length;
+  const usedIpAddresses = assets.filter(asset => asset.ipAddress && asset.ipAddress.trim() !== '').length;
 
   const stats = [
     {
@@ -42,10 +43,17 @@ const StatsCards = ({ assets }: StatsCardsProps) => {
       color: "bg-gradient-to-br from-muted/20 to-muted/10",
       iconColor: "text-muted-foreground",
     },
+    {
+      title: "Used IP Addresses",
+      value: usedIpAddresses,
+      icon: Network,
+      color: "bg-gradient-to-br from-info/10 to-info/5",
+      iconColor: "text-info",
+    },
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+    <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mb-6 sm:mb-8">
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
