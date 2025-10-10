@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Monitor, HardDrive, Cpu, Zap, Network } from "lucide-react";
+import { Monitor, HardDrive, Cpu, Zap, Network, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { LegacyAsset } from "@/types/asset";
 import {
   Dialog,
@@ -24,12 +24,42 @@ interface StatsCardsProps {
 
 const StatsCards = ({ assets }: StatsCardsProps) => {
   const [showIpDialog, setShowIpDialog] = useState(false);
+  const [sortColumn, setSortColumn] = useState<'ipAddress' | 'name' | 'assignedTo'>('ipAddress');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  
   const totalAssets = assets.length;
   const activeAssets = assets.filter(asset => asset.status === 'active').length;
   const inMaintenanceAssets = assets.filter(asset => asset.status === 'maintenance').length;
   const retiredAssets = assets.filter(asset => asset.status === 'retired').length;
   const assetsWithIp = assets.filter(asset => asset.ipAddress && asset.ipAddress.trim() !== '');
   const usedIpAddresses = assetsWithIp.length;
+
+  const handleSort = (column: 'ipAddress' | 'name' | 'assignedTo') => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedAssetsWithIp = useMemo(() => {
+    return [...assetsWithIp].sort((a, b) => {
+      let aValue = a[sortColumn] || '';
+      let bValue = b[sortColumn] || '';
+      
+      if (sortDirection === 'asc') {
+        return aValue.localeCompare(bValue);
+      } else {
+        return bValue.localeCompare(aValue);
+      }
+    });
+  }, [assetsWithIp, sortColumn, sortDirection]);
+
+  const SortIcon = ({ column }: { column: 'ipAddress' | 'name' | 'assignedTo' }) => {
+    if (sortColumn !== column) return <ArrowUpDown className="h-4 w-4 ml-1" />;
+    return sortDirection === 'asc' ? <ArrowUp className="h-4 w-4 ml-1" /> : <ArrowDown className="h-4 w-4 ml-1" />;
+  };
 
   const stats = [
     {
@@ -105,13 +135,37 @@ const StatsCards = ({ assets }: StatsCardsProps) => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>IP Address</TableHead>
-                    <TableHead>Asset Name</TableHead>
-                    <TableHead>Assigned To</TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-muted/50 transition-colors"
+                      onClick={() => handleSort('ipAddress')}
+                    >
+                      <div className="flex items-center">
+                        IP Address
+                        <SortIcon column="ipAddress" />
+                      </div>
+                    </TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-muted/50 transition-colors"
+                      onClick={() => handleSort('name')}
+                    >
+                      <div className="flex items-center">
+                        Asset Name
+                        <SortIcon column="name" />
+                      </div>
+                    </TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-muted/50 transition-colors"
+                      onClick={() => handleSort('assignedTo')}
+                    >
+                      <div className="flex items-center">
+                        Assigned To
+                        <SortIcon column="assignedTo" />
+                      </div>
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {assetsWithIp.map((asset) => (
+                  {sortedAssetsWithIp.map((asset) => (
                     <TableRow key={asset.id}>
                       <TableCell className="font-mono">{asset.ipAddress}</TableCell>
                       <TableCell>{asset.name}</TableCell>
