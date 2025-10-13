@@ -192,12 +192,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="bg-card border-b">
-        <div className="container mx-auto px-4 py-4">
-          <h1 className="text-xl sm:text-2xl font-bold text-foreground">Asset Management</h1>
-        </div>
-      </div>
-      
       <main className="container mx-auto px-4 py-6 sm:py-8">
         <div className="flex flex-col gap-4 sm:gap-6 mb-6 sm:mb-8">
           <div className="flex-1">
