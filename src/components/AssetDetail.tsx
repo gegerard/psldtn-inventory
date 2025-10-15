@@ -193,6 +193,12 @@ const AssetDetail = ({ asset, isOpen, onClose, onEdit, onDelete }: AssetDetailPr
                     </span>
                   </div>
                 )}
+                {asset.division && (
+                  <div className="grid grid-cols-3 gap-2">
+                    <span className="text-muted-foreground">Division:</span>
+                    <span className="col-span-2 font-medium">{asset.division}</span>
+                  </div>
+                )}
               </div>
             </div>
 
